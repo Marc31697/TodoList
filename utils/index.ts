@@ -1,9 +1,8 @@
-type Task = {
+export type Task = {
   id: string;
   task: string;
   completed: boolean;
   createdAt: Date;
-  completedAt: Date;
 };
 
 export type Tasks = {
