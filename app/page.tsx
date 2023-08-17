@@ -2,33 +2,52 @@
 
 import { useState, useEffect } from "react";
 import { List, ListChooser } from "@/components";
-import { Tasks, loadTasks, saveTasks } from "@/utils";
+import { Task, Tasks, loadTasks, saveTasks } from "@/utils";
+import { v4 as uuidV4 } from "uuid";
 
 export default function Home() {
-  // const tasks: Tasks = loadTasks();
   const [tasks, setTasks] = useState<Tasks>(loadTasks());
   const [titleList, setTitleList] = useState(Object.keys(tasks));
   const [activeTitle, setActiveTitle] = useState(Object.keys(tasks)[0] || "");
-  // const [activeTasks, setActiveTasks] = useState<string[]>([]);
-  // const addItemToList = (newTask: string) => {
-  //   const addTask = activeTasks;
-  //   addTask.push(newTask);
-  // };
+  const [activeTasks, setActiveTasks] = useState<Task[]>(
+    tasks[activeTitle] || []
+  );
 
   const createNewList = (title: string) => {
     setActiveTitle(title);
     setTasks((prevTasks) => ({ ...prevTasks, [title]: [] }));
   };
 
-  useEffect(() => {
-    setTitleList(Object.keys(tasks));
-    saveTasks(tasks);
-  }, [tasks]);
+  const handleAddTask = (newTask: string) => {
+    const task = {
+      id: uuidV4(),
+      task: newTask,
+      completed: false,
+      createdAt: new Date(),
+    };
+
+    if (!task) return null;
+
+    const updatedTasks = [...activeTasks, task];
+    setActiveTasks(updatedTasks);
+
+    setTasks((prevTasks) => ({
+      ...prevTasks,
+      [activeTitle]: updatedTasks,
+    }));
+  };
 
   const clearTasks = () => {
     localStorage.clear();
     setTasks(loadTasks());
+    setActiveTitle("");
   };
+
+  useEffect(() => {
+    setTitleList(Object.keys(tasks));
+    setActiveTasks(tasks[activeTitle] || []);
+    saveTasks(tasks);
+  }, [activeTitle, tasks]);
 
   return (
     <main className="flex justify-center h-[75vh] items-center">
@@ -45,9 +64,9 @@ export default function Home() {
           titleList={titleList}
           createNewList={createNewList}
         />
-        {/* {activeTitle && (
-          <List todoList={activeTodoList} addItemToList={addItemToList} />
-        )} */}
+        {activeTitle && (
+          <List taskList={activeTasks} handleAddTask={handleAddTask} />
+        )}
       </div>
     </main>
   );
