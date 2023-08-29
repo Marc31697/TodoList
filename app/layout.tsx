@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { Footer } from "@/components";
+import { Footer, Sidebar, TaskProvider } from "@/components";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +18,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`relative ${inter.className}`}>
-        {children}
-        <Footer />
+        <TaskProvider>
+          <div className="flex flex-row">
+            <Sidebar />
+            <div className="flex flex-col">
+              {children}
+              <Footer />
+            </div>
+          </div>
+        </TaskProvider>
       </body>
     </html>
   );
