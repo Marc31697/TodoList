@@ -1,9 +1,9 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Akshar } from "next/font/google";
 import { Footer, Sidebar, TaskProvider } from "@/components";
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Akshar({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "To Do List",

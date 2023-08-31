@@ -13,14 +13,13 @@ export default function Home() {
 
   return (
     <main className="flex h-full">
-      <div className="flex flex-col relative w-96 px-4">
+      <div className="flex flex-col relative px-4 w-full">
         {tasks && activeTitle ? (
           <List
             key={activeTitle}
             title={activeTitle}
             taskList={tasks[activeTitle]}
             updateTasks={updateTasks}
-            deleteTasks={deleteTasks}
           />
         ) : (
           <div></div>
