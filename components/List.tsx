@@ -13,14 +13,25 @@ interface ListProps {
 
 const List = ({ title, taskList, updateTasks }: ListProps) => {
   const [newTaskDesc, setNewTaskDesc] = useState("");
-  const uncompletedTasks = taskList.filter((task) => {
-    if (task.completed !== true) return task;
-  });
-  const completedTasks = taskList.filter((task) => {
-    if (task.completed === true) return task;
-  });
+  const [showDeleteTasks, setShowDeleteTasks] = useState(false);
 
-  console.log("uncompleted tasks", uncompletedTasks);
+  const tasksByCompletion = taskList.reduce(
+    (result, task) => {
+      if (task.completed) {
+        result.completedTasks.push(task);
+      } else {
+        result.uncompletedTasks.push(task);
+      }
+      return result;
+    },
+    { completedTasks: [], uncompletedTasks: [] } as {
+      completedTasks: Task[];
+      uncompletedTasks: Task[];
+    }
+  );
+
+  const completedTasks = tasksByCompletion.completedTasks;
+  const uncompletedTasks = tasksByCompletion.uncompletedTasks;
 
   const handleAddTask = () => {
     const task = {
@@ -47,6 +58,12 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
     updateTasks(title, updatedTasks);
   };
 
+  const handleDeleteTask = (task: string) => {
+    const updatedTasks = taskList.filter((oldTask) => oldTask.task !== task);
+
+    updateTasks(title, updatedTasks);
+  };
+
   useEffect(() => {
     setNewTaskDesc("");
   }, [taskList]);
@@ -55,7 +72,15 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
     <div className="flex flex-col mb-10 ml-8 pl-3">
       <div id="uncompleted tasks" className="border-l-[1px] border-red-500">
         <div className="pl-2">
-          <h1 className="text-4xl font-semibold">{title}</h1>
+          <div className="flex flex-row justify-between items-center">
+            <h1 className="text-4xl font-semibold">{title}</h1>
+            <button
+              className="border-[1px] px-2 rounded-md bg-slate-600 h-8 hover:bg-red-700 text-black"
+              onClick={() => setShowDeleteTasks(!showDeleteTasks)}
+            >
+              Delete Todos
+            </button>
+          </div>
           <div className="border-b-2 border-gray-900 mb-2 pl-2" />
         </div>
         {uncompletedTasks &&
@@ -65,6 +90,8 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
                 todo={task.task}
                 handleCompleteTask={() => handleCompleteTask(task.task)}
                 completed={task.completed}
+                showDeleteTasks={showDeleteTasks}
+                handleDeleteTask={() => handleDeleteTask(task.task)}
               />
               <div className="border-b-2 border-gray-900 mb-2" />
             </div>
@@ -110,6 +137,8 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
                 todo={task.task}
                 handleCompleteTask={() => handleCompleteTask(task.task)}
                 completed={task.completed}
+                showDeleteTasks={showDeleteTasks}
+                handleDeleteTask={() => handleDeleteTask(task.task)}
               />
               <div className="border-b-2 border-gray-900 mb-2" />
             </div>
