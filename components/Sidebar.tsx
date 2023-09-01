@@ -35,14 +35,12 @@ const Sidebar = () => {
         <ul className="text-xl">
           {titleList &&
             titleList.map((title) => (
-              <div
+              <li
                 key={title}
-                className="flex flex-row items-center justify-between hover:bg-blue-900 px-2"
+                className="py-2 text-white truncate flex flex-row items-center justify-between hover:bg-blue-900 px-2"
               >
                 <button className="w-3/4" onClick={() => setActiveTitle(title)}>
-                  <li className="py-2 text-white truncate">
-                    {title.charAt(0).toUpperCase() + title.slice(1)}
-                  </li>
+                  {title.charAt(0).toUpperCase() + title.slice(1)}
                 </button>
                 <button
                   className="text-[10px] h-full px-1"
@@ -62,16 +60,16 @@ const Sidebar = () => {
                   handleDeleteList={() => handleDeleteTaskList(title)}
                   title={title}
                 />
-              </div>
+              </li>
             ))}
-          <button
-            onClick={() => setCreateListModalOpen(true)}
-            className="w-full"
-          >
-            <li className="px-4 py-2 text-white hover:bg-blue-900">
+          <li className="px-4 py-2 text-white hover:bg-blue-900">
+            <button
+              onClick={() => setCreateListModalOpen(true)}
+              className="w-full"
+            >
               Create New List
-            </li>
-          </button>
+            </button>
+          </li>
         </ul>
       </nav>
       <CreateListModal

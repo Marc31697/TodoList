@@ -1,8 +1,8 @@
 // components/TaskContext.js
 "use client";
 
-import { Task, Tasks, loadTasks } from "@/utils";
-import React, { createContext, useContext, useState } from "react";
+import { Task, Tasks, loadTasks, saveTasks } from "@/utils";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 type TaskContextType = {
   tasks: Tasks;
@@ -25,8 +25,14 @@ interface TaskProviderProps {
 }
 
 export const TaskProvider = ({ children }: TaskProviderProps) => {
-  const [tasks, setTasks] = useState(loadTasks());
+  const [tasks, setTasks] = useState<Tasks>({});
+  const [isLoading, setIsLoading] = useState(true);
   const [activeTitle, setActiveTitle] = useState<string | undefined>("");
+
+  useEffect(() => {
+    setTasks(loadTasks());
+    setIsLoading(false);
+  }, []);
 
   const updateTasks = (title: string, newTaskList?: Task[]) => {
     setTasks((prevTasks: Tasks) => ({
@@ -40,6 +46,12 @@ export const TaskProvider = ({ children }: TaskProviderProps) => {
     delete updatedTasks[title];
     setTasks(updatedTasks);
   };
+
+  useEffect(() => {
+    if (!isLoading) {
+      saveTasks(tasks);
+    }
+  }, [tasks, isLoading]);
 
   return (
     <TaskContext.Provider

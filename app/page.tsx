@@ -7,10 +7,6 @@ import { useEffect } from "react";
 export default function Home() {
   const { tasks, updateTasks, deleteTasks, activeTitle } = useTaskContext();
 
-  useEffect(() => {
-    saveTasks(tasks);
-  }, [tasks]);
-
   return (
     <main className="flex h-full">
       <div className="flex flex-col relative w-screen">
