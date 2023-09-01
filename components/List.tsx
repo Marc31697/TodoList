@@ -69,13 +69,13 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
   }, [taskList]);
 
   return (
-    <div className="flex flex-col mb-10 ml-8 pl-3">
+    <div className="flex flex-col mb-10 ml-5 pl-3 w-4/6 lg:w-3/4 flex-grow mt-5">
       <div id="uncompleted tasks" className="border-l-[1px] border-red-500">
         <div className="pl-2">
           <div className="flex flex-row justify-between items-center">
-            <h1 className="text-4xl font-semibold">{title}</h1>
+            <h1 className="text-4xl font-semibold w-3/4">{title}</h1>
             <button
-              className="border-[1px] px-2 rounded-md bg-slate-600 h-8 hover:bg-red-700 text-black"
+              className="border-[1px] px-2 rounded-md h-8 bg-red-700 hover:bg-red-500 text-black"
               onClick={() => setShowDeleteTasks(!showDeleteTasks)}
             >
               Delete Todos

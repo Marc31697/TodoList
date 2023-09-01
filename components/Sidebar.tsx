@@ -31,19 +31,16 @@ const Sidebar = () => {
   return (
     <div>
       <nav className="bg-sky-500 bg-opacity-20 h-screen w-48 flex flex-col pt-10 px-4">
-        <div className="border-b-2 text-2xl text-center">To Do Lists</div>
+        <div className="border-b-2 text-2xl text-center">Lists</div>
         <ul className="text-xl">
           {titleList &&
             titleList.map((title) => (
               <div
                 key={title}
-                className="flex flex-row items-center hover:bg-blue-900 px-2"
+                className="flex flex-row items-center justify-between hover:bg-blue-900 px-2"
               >
-                <button
-                  className="w-full"
-                  onClick={() => setActiveTitle(title)}
-                >
-                  <li className="py-2 text-white">
+                <button className="w-3/4" onClick={() => setActiveTitle(title)}>
+                  <li className="py-2 text-white truncate">
                     {title.charAt(0).toUpperCase() + title.slice(1)}
                   </li>
                 </button>

@@ -16,7 +16,7 @@ const Todo = ({
 }: TodoProps) => {
   return (
     <div className="flex flex-row items-center text-2xl mb-2 justify-between">
-      <div className="flex flex-row items-center">
+      <div className="flex flex-row items-center w-3/4">
         {!completed && (
           <input
             type="checkbox"
@@ -24,7 +24,7 @@ const Todo = ({
             onChange={handleCompleteTask}
           />
         )}
-        <div className="pl-2">{todo}</div>
+        <div className="pl-2 truncate">{todo}</div>
       </div>
       {showDeleteTasks && (
         <button className="text-[10px] h-full px-1" onClick={handleDeleteTask}>
