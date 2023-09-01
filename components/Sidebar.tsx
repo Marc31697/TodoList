@@ -1,13 +1,18 @@
 "use client";
 
-import { CreateListModal, useTaskContext } from "@/components";
+import {
+  CreateListModal,
+  useTaskContext,
+  ConfirmationModal,
+} from "@/components";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 
 const Sidebar = () => {
   const { tasks, updateTasks, setActiveTitle, deleteTasks } = useTaskContext();
   const [titleList, setTitleList] = useState(Object.keys(tasks));
-  const [modalOpen, setModalOpen] = useState(false);
+  const [createListModalOpen, setCreateListModalOpen] = useState(false);
+  const [confimrationModalOpen, setConfimrationModalOpen] = useState("");
 
   const createNewList = (title: string) => {
     updateTasks(title);
@@ -44,7 +49,7 @@ const Sidebar = () => {
                 </button>
                 <button
                   className="text-[10px] h-full px-1"
-                  onClick={() => handleDeleteTaskList(title)}
+                  onClick={() => setConfimrationModalOpen(title)}
                 >
                   <Image
                     alt="trash icon"
@@ -54,9 +59,18 @@ const Sidebar = () => {
                     className="invert hover:invert-0"
                   />
                 </button>
+                <ConfirmationModal
+                  isOpen={confimrationModalOpen === title}
+                  handleClose={() => setConfimrationModalOpen("")}
+                  handleDeleteList={() => handleDeleteTaskList(title)}
+                  title={title}
+                />
               </div>
             ))}
-          <button onClick={() => setModalOpen(true)} className="w-full">
+          <button
+            onClick={() => setCreateListModalOpen(true)}
+            className="w-full"
+          >
             <li className="px-4 py-2 text-white hover:bg-blue-900">
               Create New List
             </li>
@@ -64,8 +78,8 @@ const Sidebar = () => {
         </ul>
       </nav>
       <CreateListModal
-        isOpen={modalOpen}
-        handleClose={() => setModalOpen(false)}
+        isOpen={createListModalOpen}
+        handleClose={() => setCreateListModalOpen(false)}
         createNewList={createNewList}
       />
     </div>

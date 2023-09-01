@@ -3,6 +3,7 @@ import Todo from "./Todo";
 import Footer from "./Footer";
 import CreateListModal from "./CreateListModal";
 import Sidebar from "./Sidebar";
+import ConfirmationModal from "./ConfirmationModal";
 import { TaskProvider, useTaskContext } from "./TaskProvider";
 
 export {
@@ -13,4 +14,5 @@ export {
   Sidebar,
   TaskProvider,
   useTaskContext,
+  ConfirmationModal,
 };
