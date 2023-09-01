@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Akshar } from "next/font/google";
-import { Footer, Sidebar, TaskProvider } from "@/components";
+import { Sidebar, TaskProvider } from "@/components";
 
 const inter = Akshar({ subsets: ["latin"] });
 
@@ -21,10 +21,7 @@ export default function RootLayout({
         <TaskProvider>
           <div className="flex flex-row">
             <Sidebar />
-            <div className="flex flex-col">
-              {children}
-              <Footer />
-            </div>
+            <div className="flex flex-col">{children}</div>
           </div>
         </TaskProvider>
       </body>
