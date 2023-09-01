@@ -1,6 +1,6 @@
 "use client";
 
-import { List, useTaskContext } from "@/components";
+import { List, SelectList, useTaskContext } from "@/components";
 import { saveTasks } from "@/utils";
 import { useEffect } from "react";
 
@@ -13,7 +13,7 @@ export default function Home() {
 
   return (
     <main className="flex h-full">
-      <div className="flex flex-col relative px-4 w-full">
+      <div className="flex flex-col relative w-screen">
         {tasks && activeTitle ? (
           <List
             key={activeTitle}
@@ -22,7 +22,7 @@ export default function Home() {
             updateTasks={updateTasks}
           />
         ) : (
-          <div></div>
+          <SelectList />
         )}
       </div>
     </main>
