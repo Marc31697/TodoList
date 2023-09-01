@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { Todo } from "@/components";
 import { Task } from "@/utils";
-import { v4 as uuidV4 } from "uuid";
+import useList from "./useList";
 
 interface ListProps {
   title: string;
@@ -12,61 +11,7 @@ interface ListProps {
 }
 
 const List = ({ title, taskList, updateTasks }: ListProps) => {
-  const [newTaskDesc, setNewTaskDesc] = useState("");
-  const [showDeleteTasks, setShowDeleteTasks] = useState(false);
-
-  const tasksByCompletion = taskList.reduce(
-    (result, task) => {
-      if (task.completed) {
-        result.completedTasks.push(task);
-      } else {
-        result.uncompletedTasks.push(task);
-      }
-      return result;
-    },
-    { completedTasks: [], uncompletedTasks: [] } as {
-      completedTasks: Task[];
-      uncompletedTasks: Task[];
-    }
-  );
-
-  const completedTasks = tasksByCompletion.completedTasks;
-  const uncompletedTasks = tasksByCompletion.uncompletedTasks;
-
-  const handleAddTask = () => {
-    const task = {
-      id: uuidV4(),
-      task: newTaskDesc,
-      completed: false,
-      createdAt: new Date(),
-    };
-
-    if (!task || !newTaskDesc) return null;
-
-    const updatedTasks = [...taskList, task];
-
-    updateTasks(title, updatedTasks);
-    setNewTaskDesc("");
-  };
-
-  const handleCompleteTask = (task: string) => {
-    const updatedTasks = taskList.map((oldTask) => {
-      if (oldTask.task === task) oldTask.completed = true;
-      return oldTask;
-    });
-
-    updateTasks(title, updatedTasks);
-  };
-
-  const handleDeleteTask = (task: string) => {
-    const updatedTasks = taskList.filter((oldTask) => oldTask.task !== task);
-
-    updateTasks(title, updatedTasks);
-  };
-
-  useEffect(() => {
-    setNewTaskDesc("");
-  }, [taskList]);
+  const { state, actions } = useList({ taskList, updateTasks, title });
 
   return (
     <div className="flex flex-col mb-10 ml-5 pl-3 w-4/6 lg:w-3/4 flex-grow mt-5">
@@ -76,22 +21,22 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
             <h1 className="text-4xl font-semibold w-3/4">{title}</h1>
             <button
               className="border-[1px] px-2 rounded-md h-8 bg-red-700 hover:bg-red-500 text-black"
-              onClick={() => setShowDeleteTasks(!showDeleteTasks)}
+              onClick={() => state.setShowDeleteTasks(!state.showDeleteTasks)}
             >
               Delete Todos
             </button>
           </div>
           <div className="border-b-2 border-gray-900 mb-2 pl-2" />
         </div>
-        {uncompletedTasks &&
-          uncompletedTasks.map((task) => (
+        {state.uncompletedTasks &&
+          state.uncompletedTasks.map((task) => (
             <div key={task.task} className="pl-2">
               <Todo
                 todo={task.task}
-                handleCompleteTask={() => handleCompleteTask(task.task)}
+                handleCompleteTask={() => actions.handleCompleteTask(task.task)}
                 completed={task.completed}
-                showDeleteTasks={showDeleteTasks}
-                handleDeleteTask={() => handleDeleteTask(task.task)}
+                showDeleteTasks={state.showDeleteTasks}
+                handleDeleteTask={() => actions.handleDeleteTask(task.task)}
               />
               <div className="border-b-2 border-gray-900 mb-2" />
             </div>
@@ -103,16 +48,16 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
               type="text"
               className="bg-inherit border-0 w-min px-0 focus:ring-0 h-full text-2xl"
               placeholder="Enter task here"
-              value={newTaskDesc}
+              value={state.newTaskDesc}
               onKeyUp={(event) => {
                 if (event.key === "Enter") {
-                  handleAddTask();
+                  actions.handleAddTask();
                 }
               }}
-              onChange={(event) => setNewTaskDesc(event.target.value)}
+              onChange={(event) => state.setNewTaskDesc(event.target.value)}
             />
             <button
-              onClick={handleAddTask}
+              onClick={actions.handleAddTask}
               className="text-white flex items-center justify-start"
             >
               ✔️
@@ -130,15 +75,15 @@ const List = ({ title, taskList, updateTasks }: ListProps) => {
           <h1 className="text-4xl font-semibold">Completed</h1>
           <div className="border-b-2 border-gray-900 mb-2" />
         </div>
-        {completedTasks &&
-          completedTasks.map((task) => (
+        {state.completedTasks &&
+          state.completedTasks.map((task) => (
             <div key={task.task} className="pl-2">
               <Todo
                 todo={task.task}
-                handleCompleteTask={() => handleCompleteTask(task.task)}
+                handleCompleteTask={() => actions.handleCompleteTask(task.task)}
                 completed={task.completed}
-                showDeleteTasks={showDeleteTasks}
-                handleDeleteTask={() => handleDeleteTask(task.task)}
+                showDeleteTasks={state.showDeleteTasks}
+                handleDeleteTask={() => actions.handleDeleteTask(task.task)}
               />
               <div className="border-b-2 border-gray-900 mb-2" />
             </div>
